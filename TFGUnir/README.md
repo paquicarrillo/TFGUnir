@@ -1,4 +1,4 @@
-En este repositorio se encuentra todo el código utilizado tanto para el despliegue de la infraestructura, el pipeline y el código de la aplicación usada como ejemplo para la simulación
+En este repositorio se encuentra todo el código utilizado durante el desarrollo de nuestro TFE, tanto para el despliegue de la infraestructura, el pipeline y el código de la aplicación usada como ejemplo para la simulación
 del despliegue de aplicaciones en distintos entornos
 
 ### cicd
