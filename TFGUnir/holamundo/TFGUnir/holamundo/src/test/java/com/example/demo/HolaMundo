@@ -1,0 +1,15 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+// HolaMundo.java
+// public class HolaMundo: Define una clase pública llamada “HolaMundo”.
+public class HolaMundo {
+    //public static void main(String[] args) es el método principal.
+    public static void main( fecha String[] args) {
+        fecha DateTimeFormatter dtf = DateTimeFormatter.ofPattern("d MMMM yyyy ',' h:mm:ss");
+        fecha LocalDateTime now = LocalDateTime.now(); 
+        // Imprimir "Hola Mundo" en la consola
+        System.out.println("Hola Mundo, la hora es + dtf.format(now) ");
+    }
+}
+

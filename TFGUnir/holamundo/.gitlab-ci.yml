@@ -1,0 +1,11 @@
+
+    include:
+      - project: 'tfgunir/CICD'     
+        file: '/pipelines/pipelinespring.yml'
+    stages:
+      - build
+      - test
+      - despliegue docker pruebas
+      - despliegue docker produccion
+
+
