@@ -36,6 +36,27 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<scm>
+		<url>http://gitlab.tfgunir.es/tfgunir/holamundo</url> <connection>scm:git:http://gitlab.tfgunir.es/tfgunir/holamundo.git</connection> 
+		<developerConnection>scm:git:[push=]http://gitlab.tfgunir.es/tfgunir/holamundo.git[fetch=]http://gitlab.tfgunir.es/tfgunir/holamundo.git</developerConnection> 
+		<tag>HEAD</tag>
+	</scm>
+	<repositories>
+  		<repository>
+    			<id>gitlab-maven</id>
+    			<url>${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/maven</url>
+  		</repository>
+	</repositories>
+	<distributionManagement>
+    		<repository>
+        		<id>releases</id>
+    			<url>${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/maven</url>
+    		</repository>
+    		<snapshotRepository>
+        		<id>snapshots</id>
+    			<url>${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/maven</url>
+    		</snapshotRepository>
+	</distributionManagement>
 
 	<build>
 		<plugins>
@@ -50,7 +71,6 @@
       				<configuration>
         			<tagNameFormat>@{project.version}</tagNameFormat>
 				<autoVersionSubmodules>true</autoVersionSubmodules>
-				<altDeploymentRepository>gitlab-maven::default::http://gitlab.tfgunir.es/api/V4/projects/35/packages/maven</altDeploymentRepository>
       				</configuration>
     			</plugin>
 		</plugins>
