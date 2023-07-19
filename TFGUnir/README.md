@@ -15,7 +15,7 @@ Las instrucciones se encuentran detalladas en el documento del trabajo.
 ### holamundo
 
 Contiene el código fuente de la aplicación ejemplo de Spring Boot que se usó como ejemplo en la ejecución del Pipeline.
-Contiene además el pom.xml y el settings.xml (necesarios para la generación y almacenamiento de artefactos snapshot y release), docker-compose.yml (necesario para la ejecución en docker de la imagen Docker con artefacto) y el Dockerfile usado para la generación de la imagen con artefacto.
+Contiene además el pom.xml y el settings.xml (necesarios para la generación y almacenamiento de artefactos snapshot y release), pipeline de ci/cd .gitlab-ci.yml, docker-compose.yml (necesario para la ejecución en docker de la imagen Docker con artefacto) y el Dockerfile usado para la generación de la imagen con artefacto.
 - El directorio src contiene el código de la aplicación y del test unitario.
 - El directorio .m2, el settings.xml
 - El directorio principal los archivos necesarios para la construcción de la imagen docker de la aplicación (Dockerfile) y el archivo para construcción y ejecución de contenedor docker-compose.xml.
