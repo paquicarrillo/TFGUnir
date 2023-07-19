@@ -4,24 +4,24 @@ stages:
   - despliegue docker pruebas
   - despliegue docker produccion
 
-variables:
-  MAVEN_CLI_OPTS2: "-s .m2/settings.xml --batch-mode"
-  MAVEN_CLI_OPTS: "--batch-mode"
-  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
-  VERSION: "$VERSION"
-  NEW_VERSION: "n"
-  OPTS_VERSION: " -DreleaseVersion=$VERSION -DdevelopmentVersion=$NEWVERSION-SNAPSHOT -DgenerateBackupPoms=false -DES_SNAPSHOT=RELEASE -DpushChanges=false \
-    -DlocalCheckout=true "
-
 build:
   tags: 
     - docker 
   stage: build
   image: maven:3.8.1-openjdk-11
+  except: 
+    variables:
+      - $CI_COMMIT_TITLE =~ /^.+maven-release-plugin.+prepare for next development iteration.*$/i
+      - $CI_COMMIT_DESCRIPTION =~ /^.+maven-release-plugin.+prepare for next development iteration.*$/i
+  variables:
+    GIT_STRATEGY: clone 
   script:
+    - export MAVEN_CLI_OPTS2="-s .m2/settings.xml --batch-mode"
+    - export MAVEN_CLI_OPTS="--batch-mode"
+    - export MAVEN_OPTS="-Dmaven.repo.local=.m2/repository"
+    - export OPTS_VERSION="  -DpushChanges=false -DgenerateBackupPoms=false -DlocalCheckout=true "
     - if [[ "$CI_COMMIT_BRANCH" != 'master' ]]; then mvn $MAVEN_CLI_OPTS $MAVEN_OPTS clean install -DskipTests; fi;  
-#   - if [[ "$CI_COMMIT_BRANCH" == 'master' ]]; then mvn $MAVEN_CLI_OPTS2 $MAVEN_OPTS $OPTS_VERSION release:clean release:prepare release:perform -X; fi;
-    - if [[ "$CI_COMMIT_BRANCH" == 'master' ]]; then mvn $MAVEN_CLI_OPTS $MAVEN_OPTS release:prepare release:perform; fi;
+    - if [[ "$CI_COMMIT_BRANCH" == 'master' ]]; then git config --global user.name "${GITLAB_USER_NAME}" ; git config --global user.email "${GITLAB_USER_EMAIL}" ; git remote remove origin ; git remote add origin http://$CICD_USER:$CICD_PASSWORD@$CI_SERVER_HOST/$CI_PROJECT_PATH.git ; git checkout -b master ; mvn $MAVEN_CLI_OPTS2 $MAVEN_OPTS $OPTS_VERSION release:clean release:prepare release:perform ; git push origin master ; fi; 
   artifacts:
     paths:
       - target/*.jar
@@ -35,6 +35,10 @@ test:
     - docker 
   stage: test
   image: maven:3.8.1-openjdk-11
+  except: 
+    variables:
+      - $CI_COMMIT_TITLE =~ /^.+maven-release-plugin.+prepare for next development iteration.*$/i
+      - $CI_COMMIT_DESCRIPTION =~ /^.+maven-release-plugin.+prepare for next development iteration.*$/i
   script:
     - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS test
   cache:
@@ -44,8 +48,6 @@ test:
 
 variables:
   ENTORNO: "pru"
-
-
 
 despliegue_pruebas:
   tags: 
@@ -57,8 +59,6 @@ despliegue_pruebas:
   environment:
     name: pruebas
   script:
-#    - pwd
-#    - printenv
     - if [[ "$CI_COMMIT_BRANCH" != 'master' ]]; then ENTORNO="pru"; fi;
     - echo $CICD_PASSWORD | docker login --username cicd --password-stdin $CI_REGISTRY
     - docker build -t $CI_REGISTRY/$CI_PROJECT_PATH:$CI_PROJECT_NAME-$ENTORNO-$CI_COMMIT_SHORT_SHA .
@@ -75,13 +75,15 @@ scan_image:
   tags:
     - docker
   stage: despliegue docker pruebas
+  environment:
+    name: pruebas
   script:
     - if [[ "$CI_COMMIT_BRANCH" != 'master' ]]; then ENTORNO="pru"; fi;
     - trivy image --exit-code 1 --severity HIGH,CRITICAL $CI_REGISTRY/$CI_PROJECT_PATH:$CI_PROJECT_NAME-$ENTORNO-$CI_COMMIT_SHORT_SHA
   artifacts:
     paths: 
       - target/vulnerabilidades.json
-  allow_failure: true 
+  allow_failure: false 
   dependencies:
     - despliegue_pruebas
   rules:

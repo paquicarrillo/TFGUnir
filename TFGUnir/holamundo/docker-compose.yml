@@ -4,3 +4,6 @@ services:
     image: "$CI_REGISTRY/$CI_PROJECT_PATH:$CI_PROJECT_NAME-$ENTORNO-$CI_COMMIT_SHORT_SHA"
     container_name: holamundo
     restart: unless-stopped
+    ports:
+      - 8080:5000
+

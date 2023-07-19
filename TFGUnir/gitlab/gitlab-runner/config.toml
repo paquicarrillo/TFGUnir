@@ -1,0 +1,28 @@
+concurrent = 2
+check_interval = 0
+shutdown_timeout = 0
+
+[session_server]
+  session_timeout = 1800
+
+[[runners]]
+  name = "runner-tfgunir"
+  url = "http://gitlab.tfgunir.es"
+  id = 2
+  token = "8RK9yq3ik7beyvfHu3-Z"
+  token_obtained_at = 2023-05-17T14:04:08Z
+  token_expires_at = 0001-01-01T00:00:00Z
+  executor = "docker"
+# environment = ["DOCKER_AUTH_CONFIG={\"auths\":{\"gitlab-registry.tfgunir.es\":{\"auth\":\"Y2ljZDowMEh1aXQwMA==\"}}}"]
+  [runners.cache]
+    MaxUploadedArchiveSize = 0
+  [runners.docker]
+    tls_verify = false
+    image = "docker:stable"
+    privileged = true
+    disable_entrypoint_overwrite = false
+    oom_kill_disable = false
+    disable_cache = false
+    volumes = ["/var/run/docker.sock:/var/run/docker.sock", "/cache"]
+    shm_size = 0
+    network_mode = "gitlab-network"
