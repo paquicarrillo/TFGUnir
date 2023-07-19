@@ -48,18 +48,6 @@ services:
       networks:
         - gitlab
 
-#   gitlab-pruebas:
-#      image: docker:20.10
-#      restart: always
-#      depends_on:
-#        - gitlab
-#      volumes:
-#        - /var/run/docker.sock:/var/run/docker.sock
-#      command: tail -F /dev/null
-#      networks:
-#        - gitlab
-#
-
 networks:
    gitlab:
      name: gitlab-network
